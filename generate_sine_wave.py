@@ -1,47 +1,53 @@
 import numpy as np
-
+from scipy.io import wavfile
 import matplotlib.pyplot as plot
 
 
-# Get x values of the sine wave
-
-time = np.arange(0, 10, 0.1)
-
-
-# Amplitude of the sine wave is sine of a variable like time
-
-amplitude = np.sin(time)
+def writeWavFile(sampleRate, y):
+    wavfile.write('Sine.wav', sampleRate, y)  # Produces a 5 second Audio-File
 
 
-# Plot a sine wave using time and amplitude obtained for the sine wave
+def buildGraph(time):
+    amplitude = np.sin(time)
+    # Plot a sine wave using time and amplitude obtained for the sine wave
 
-plot.plot(time, amplitude)
+    plot.plot(time, amplitude)
+
+    # Give a title for the sine wave plot
+
+    plot.title('Sine wave')
+
+    # Give x axis label for the sine wave plot
+
+    plot.xlabel('Time')
+
+    # Give y axis label for the sine wave plot
+
+    plot.ylabel('Amplitude = sin(time)')
+
+    plot.grid(True, which='both')
+
+    plot.axhline(y=0, color='k')
+
+    plot.show()
+
+    # Display the sine wave
+
+    plot.show()
 
 
-# Give a title for the sine wave plot
+def main():
+    sampleRate = 44100
 
-plot.title('Sine wave')
+    frequency = int(input("Enter the frequency: (17500, 18500, 19500..) "))  # 17.5 kHz
+    length = 5
+    t = np.linspace(0, length, sampleRate * length)  # --> x (t)= A o⋅sin (2 π f o t + ϕ )
+    y = np.sin(frequency * 2 * np.pi * t)
 
-
-# Give x axis label for the sine wave plot
-
-plot.xlabel('Time')
-
-
-# Give y axis label for the sine wave plot
-
-plot.ylabel('Amplitude = sin(time)')
+    buildGraph(t)
+    writeWavFile(sampleRate, y)
+    print("File successfully created")
 
 
-plot.grid(True, which='both')
-
-
-plot.axhline(y=0, color='k')
-
-
-plot.show()
-
-
-# Display the sine wave
-
-plot.show()
+if __name__ == "__main__":
+    main()
