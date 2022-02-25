@@ -4,7 +4,7 @@ import matplotlib.pyplot as plot
 
 
 def writeWavFile(sampleRate, y):
-    wavfile.write('Sine.wav', sampleRate, y)  # Produces a 5 second Audio-File
+    wavfile.write('media/Sine.wav', sampleRate, y)  # Produces a 5 second Audio-File
 
 
 def buildGraph(time):
