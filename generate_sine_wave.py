@@ -44,9 +44,12 @@ def main():
     t = np.linspace(0, length, sampleRate * length)  # --> x (t)= A o⋅sin (2 π f o t + ϕ )
     y = np.sin(frequency * 2 * np.pi * t)
 
-    buildGraph(t)
-    writeWavFile(sampleRate, y)
-    print("File successfully created")
+    try:   
+        writeWavFile(sampleRate, y)
+        buildGraph(t)
+        print("File successfully created")
+    except:
+        print("\nArrivederci")
 
 
 if __name__ == "__main__":
