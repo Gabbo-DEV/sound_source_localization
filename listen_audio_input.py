@@ -23,8 +23,6 @@ def listen_audio_input(RECORD_SECONDS=5, RATE=44100, WAVE_OUTPUT_FILENAME="nonam
     for index_range in range(round(RECORD_SECONDS, 0)):
         second = index_range + 1
         percent = "{0}".format((second*100)/RECORD_SECONDS)
-        while len(percent) < 5:
-            percent = "0" + percent
         print("{0}s/{1}s - {0:3.1f}%".format(second, RECORD_SECONDS, percent))
         Time.sleep(1)
     
