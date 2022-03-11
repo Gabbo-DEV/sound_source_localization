@@ -50,8 +50,3 @@ plt.legend()
 
 plt.subplots_adjust(hspace=0.35)
 plt.show()
-
-#-------------------------------------------------------------------#
-# source:                                                           #
-# https://www.delftstack.com/howto/python/low-pass-filter-python/   #
-#-------------------------------------------------------------------#
