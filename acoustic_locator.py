@@ -1,7 +1,6 @@
 import sounddevice
 import numpy as np
 
-
 class AcousticLocator:
 
     filtersPathName = 'beacons/filters.npz'
@@ -13,7 +12,6 @@ class AcousticLocator:
         self.initialize_params(beacon_positions)
 
     def initialize_params(self, beacon_positions):
-
         filters_file_path = self.filtersPathName
         filters_file = np.load(filters_file_path)
 
@@ -30,7 +28,6 @@ class AcousticLocator:
         self.b3 = beacon_positions[2]
 
     def record_audio(self):
-
         audio = sounddevice.rec(int(self.record_time * self.sample_rate),
                                 samplerate=self.sample_rate, channels=self.record_channels)
         sounddevice.wait()
@@ -40,8 +37,8 @@ class AcousticLocator:
 
         return audio
 
+    # DONE
     def compute_convolution(self, input_signal):
-
         outs = []
         out1 = self.convolve(input_signal, self.h1)
         out2 = self.convolve(input_signal, self.h2)
@@ -51,7 +48,7 @@ class AcousticLocator:
         outs.append(out2)
         outs.append(out3)
 
-        return outs
+        return outs 
 
     def convolve(self, array_one, array_two):
         array_input = []
@@ -90,11 +87,14 @@ class AcousticLocator:
 
         return powers
 
-    def compute_positions(self, powers):
+    def compute_position(self, powers):
         '''
         ComputePosition(powers) 
         Compute positions from powers
         position = [x,y]
         return position 
         '''
+        print(powers[0])
+        print(powers[1])
+        print(powers[2])
         return

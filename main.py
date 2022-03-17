@@ -1,7 +1,7 @@
 import sys
 import numpy as np
 
-from acoustic_localization import AcousticLocator
+from acoustic_locator import AcousticLocator
 
 
 def main():
@@ -14,7 +14,7 @@ def main():
         beacon_positions = [b1, b2, b3]
 
     else:
-        filename = "beacons.txt"
+        filename = "beacons/beacons.txt"
         data = []
         with open(filename) as f:
             data.append(f.read().split())
@@ -30,6 +30,7 @@ def main():
     input_signal = acoustic_localizer.record_audio()
     outs = acoustic_localizer.compute_convolution(input_signal)
     powers = acoustic_localizer.compute_powers(outs)
+    position = acoustic_localizer.compute_position(powers);
 
     print("POWER: ")
     print(powers)
