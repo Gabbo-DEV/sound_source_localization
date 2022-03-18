@@ -40,8 +40,7 @@ class Sender:
 
         plot.show()
 
-    def run(self) -> int:
-        frequency = int(input("Enter the frequency: (17500, 18500, 19500..) "))  # 17.5 kHz
+    def run(self, frequency) -> int:
         length = 5
         t = np.linspace(0, length, self.sampleRate * length)  # --> x (t)= A o⋅sin (2 π f o t + ϕ )
         y = np.sin(frequency * 2 * np.pi * t)

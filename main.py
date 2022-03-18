@@ -1,47 +1,48 @@
-import sys
-import numpy as np
+import json
 
 from acoustic_locator import AcousticLocator
-from sender import Sender
+from setup import runSetup
 
+def getBeaconsPositions():
+    f = open('config.json')
+    jsonFile = json.load(f)
+    
+    data = []
+    for i in range(1, 4):
+        coordinates = [jsonFile[f'beacon{i}']['coordinates'][0], jsonFile[f'beacon{i}']['coordinates'][1]]
+        data.append(coordinates)
+
+    return data
+
+def getBeaconsFrequencies():
+    f = open('config.json')
+    jsonFile = json.load(f)
+    
+    data = []
+    for i in range(1, 4):
+        frequency = jsonFile[f'beacon{i}']['frequency']
+        data.append(frequency)
+
+    return data
 
 def main():
-    beacon1 = Sender('f1')
-    beacon2 = Sender('f2')
-    beacon3 = Sender('f3')
-    f1 = beacon1.run()
-    f2 = beacon2.run()
-    f3 = beacon3.run()
-    freqs = [f1, f2, f3]
-    
-    beacon_positions = []
-    if len(sys.argv) > 1:
-        b1 = [sys.argv[1], sys.argv[2]]
-        b2 = [sys.argv[3], sys.argv[4]]
-        b3 = [sys.argv[5], sys.argv[6]]
-
-        beacon_positions = [b1, b2, b3]
-    else:
-        data = []
-        with open("beacons/beacons.txt") as f:
-            data.append(f.read().split())
-        data = np.array(data)
-
-        b1 = [data[0][0], data[0][1]]
-        b2 = [data[0][2], data[0][3]]
-        b3 = [data[0][4], data[0][5]]
-
-        beacon_positions = [b1, b2, b3]
-
+    try:
+        beacon_positions = getBeaconsPositions()
+        beacon_positions = getBeaconsFrequencies()
+    except FileNotFoundError:
+        exit('\033[91m' + 'Error! Configuration file not found')
+       
 
     receiver_positions = []
-    acoustic_localizer = AcousticLocator(beacon_positions, freqs)
+    acoustic_localizer = AcousticLocator(beacon_positions, beacon_positions)
+    # start loop
     input_signal = acoustic_localizer.record_audio()
     outs = acoustic_localizer.compute_convolution(input_signal)
     powers = acoustic_localizer.compute_powers(outs)
     position = acoustic_localizer.compute_position(powers)
     print(position)
     receiver_positions.append(position)
+    # end loop
 
 
 if __name__ == "__main__":

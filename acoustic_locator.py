@@ -94,24 +94,9 @@ class AcousticLocator:
         position = [x,y]
         return position 
         '''
-        x1 = int(self.b1[0])
-        y1 = int(self.b1[1])
+       
+        #TODO Sono rimasto a calcolare la posizione del ricevitore tramite quelle formule sul pdf
+        # dopo queste coordinate, dovrei capire come plottare le 3 circonferenze e il punto di intersezione e quindi 
+        # aggiornarle automaticamente, secondo per secondo credo
+        return 'aaa'
 
-        x2 = int(self.b2[0])
-        y2 = int(self.b2[1])
-
-        x3 = int(self.b3[0])
-        y3 = int(self.b3[1])
-
-        R1 = int(powers[0])
-        R2 = int(powers[1])
-        R3 = int(powers[2])
-
-        x, y = symbols("x y")
-
-        eq1 = Eq((2*(x1-x2)*x-2*(y1-y2)*y-(R1*R1)+(R2*R2)+(x1*x1+y1*y1)-(x2*x2+y2*y2)), 0)
-        eq2 = Eq((-2*(x1-x3)*x-2*(y1-y3)*y-(R1*R1)-(R3*R3)+(x1*x1+y1*y1)-(x2*x2+y2*y2)), 0)
-        eq3 = Eq((-2*(x2-x3)*x-2*(y2-y3)*y-(R2*R2)-(R3*R3)+(x1*x1+y1*y1)-(x2*x2+y2*y2)), 0)
-        solution = solve((eq1, eq2, eq3), (x, y))
-
-        return solution
