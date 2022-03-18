@@ -6,7 +6,6 @@ import matplotlib.pyplot as plot
 def writeWavFile(sampleRate, y):
     wavfile.write('media/Sine.wav', sampleRate, y)  # Produces a 5 second Audio-File
 
-
 def buildGraph(time):
     amplitude = np.sin(time)
     # Plot a sine wave using time and amplitude obtained for the sine wave
@@ -35,6 +34,9 @@ def buildGraph(time):
 
     plot.show()
 
+def writeTxtFile(freq):
+    with open('beacons/frequencies.txt', 'a') as f:
+        f.write(str(freq) + " ")
 
 def main():
     sampleRate = 44100
@@ -46,10 +48,11 @@ def main():
 
     try:   
         writeWavFile(sampleRate, y)
-        buildGraph(t)
+        writeTxtFile(frequency)
+        # buildGraph(t)
         print("File successfully created")
-    except:
-        print("\nArrivederci")
+    except KeyboardInterrupt:
+        print("\nGoodbye")
 
 
 if __name__ == "__main__":
