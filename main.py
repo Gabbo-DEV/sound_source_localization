@@ -6,9 +6,9 @@ from sender import Sender
 
 
 def main():
-    beacon1 = Sender()
-    beacon2 = Sender()
-    beacon3 = Sender()
+    beacon1 = Sender('f1')
+    beacon2 = Sender('f2')
+    beacon3 = Sender('f3')
     f1 = beacon1.run()
     f2 = beacon2.run()
     f3 = beacon3.run()
@@ -34,14 +34,14 @@ def main():
         beacon_positions = [b1, b2, b3]
 
 
-    positions = []
+    receiver_positions = []
     acoustic_localizer = AcousticLocator(beacon_positions, freqs)
     input_signal = acoustic_localizer.record_audio()
     outs = acoustic_localizer.compute_convolution(input_signal)
     powers = acoustic_localizer.compute_powers(outs)
     position = acoustic_localizer.compute_position(powers)
     print(position)
-    positions.append(position)
+    receiver_positions.append(position)
 
 
 if __name__ == "__main__":

@@ -6,11 +6,11 @@ import matplotlib.pyplot as plot
 class Sender:
     sampleRate = 44100
 
-    def __init__(self):
-        pass
+    def __init__(self, fileName):
+        self.fileName = fileName
 
     def writeWavFile(self, y):
-        wavfile.write('media/Sine.wav', self.sampleRate, y)  # Produces a 5 second Audio-File
+        wavfile.write(f'media/{self.fileName}.wav', self.sampleRate, y)  # Produces a 5 second Audio-File
 
     def buildGraph(time):
         amplitude = np.sin(time)
@@ -41,8 +41,6 @@ class Sender:
         plot.show()
 
     def run(self) -> int:
-        
-
         frequency = int(input("Enter the frequency: (17500, 18500, 19500..) "))  # 17.5 kHz
         length = 5
         t = np.linspace(0, length, self.sampleRate * length)  # --> x (t)= A o⋅sin (2 π f o t + ϕ )
