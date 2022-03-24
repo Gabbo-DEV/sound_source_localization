@@ -1,0 +1,23 @@
+{
+    "beacon1": {
+        "coordinates": [
+            11.0,
+            2.0
+        ],
+        "frequency": 16000
+    },
+    "beacon2": {
+        "coordinates": [
+            32.0,
+            1.0
+        ],
+        "frequency": 170000
+    },
+    "beacon3": {
+        "coordinates": [
+            4.0,
+            5.0
+        ],
+        "frequency": 18000
+    }
+}

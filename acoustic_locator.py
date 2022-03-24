@@ -1,10 +1,9 @@
 import sounddevice
 import numpy as np
-from sympy import symbols, Eq, solve
-
+import matplotlib.pyplot as plt
 
 class AcousticLocator:
-
+    
     filtersPathName = 'beacons/filters.npz'
 
     def __init__(self, beacon_positions, f):
@@ -27,6 +26,8 @@ class AcousticLocator:
         self.b1 = beacon_positions[0]  # b1 = [x , y]
         self.b2 = beacon_positions[1]
         self.b3 = beacon_positions[2]
+
+        self.K = 1
 
     def record_audio(self):
         audio = sounddevice.rec(int(self.record_time * self.sample_rate),
@@ -87,16 +88,41 @@ class AcousticLocator:
 
         return powers
 
-    def compute_position(self, powers):
-        '''
-        ComputePosition(powers) 
-        Compute positions from powers
-        position = [x,y]
-        return position 
-        '''
-       
-        #TODO Sono rimasto a calcolare la posizione del ricevitore tramite quelle formule sul pdf
-        # dopo queste coordinate, dovrei capire come plottare le 3 circonferenze e il punto di intersezione e quindi 
-        # aggiornarle automaticamente, secondo per secondo credo
-        return 'aaa'
+    def compute_power(self):
+        pass # calcolare la potenza del segnale generato con lo stesso metodo con cui la si calcola sul segnale ricevuto
 
+    def compute_radiuses(self, P, powers):
+        radiuses = []
+        for power in powers:
+            radiuses.append(self.K * np.sqrt(P/power))
+        
+        return radiuses
+
+    def compute_position(self, powers):
+        # r1, r2, r3 = self.compute_radius(self.compute_power(), powers)
+        r1 = 1
+        r2 = 1
+        r3 = 1
+        
+        A = np.array([
+            [-2*(self.b1[0]-self.b2[0]), -2*(self.b1[1]-self.b2[1])],
+            [-2*(self.b1[0]-self.b3[0]), -2*(self.b1[1]-self.b3[1])]
+        ])
+
+        B = np.array([
+            [r1-r2-(self.b1[0]**2+self.b1[1]**2)+(self.b2[0]**2+self.b2[1]**2)],
+            [r1-r3-(self.b1[0]**2+self.b3[1]**2)+(self.b1[0]**2+self.b3[1]**2)]
+        ])
+
+        solution = 0
+        try:
+            solution = np.linalg.solve(A, B)
+        except Exception as e:
+            print(e)
+        
+        return solution
+
+    def plot_position(self, receiver_positions):
+
+        plt.scatter(receiver_positions[-1][0], receiver_positions[-1][1])
+        plt.show()
