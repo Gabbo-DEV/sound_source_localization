@@ -1,9 +1,11 @@
+import time
 import sounddevice
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 class AcousticLocator:
-    
+
     filtersPathName = 'beacons/filters.npz'
 
     def __init__(self, beacon_positions, f):
@@ -28,6 +30,9 @@ class AcousticLocator:
         self.b3 = beacon_positions[2]
 
         self.K = 1
+
+        self.fig = None
+        self.ax = None
 
     def record_audio(self):
         audio = sounddevice.rec(int(self.record_time * self.sample_rate),
@@ -89,28 +94,30 @@ class AcousticLocator:
         return powers
 
     def compute_power(self):
-        pass # calcolare la potenza del segnale generato con lo stesso metodo con cui la si calcola sul segnale ricevuto
+        pass  # calcolare la potenza del segnale generato con lo stesso metodo con cui la si calcola sul segnale ricevuto
 
     def compute_radiuses(self, P, powers):
-        radiuses = []
-        for power in powers:
-            radiuses.append(self.K * np.sqrt(P/power))
-        
-        return radiuses
+        P = [17e-03, 25e-03, 34e-03]
+
+        r1 = self.K * np.sqrt(P[0] / powers[0])
+        r2 = self.K * np.sqrt(P[1] / powers[1])
+        r3 = self.K * np.sqrt(P[2] / powers[2])
+ 
+        return r1, r2, r3
+
 
     def compute_position(self, powers):
-        # r1, r2, r3 = self.compute_radius(self.compute_power(), powers)
-        r1 = 1
-        r2 = 1
-        r3 = 1
-        
+        print(powers)
+        r1, r2, r3 = self.compute_radiuses(self.compute_power(), powers)
+
         A = np.array([
             [-2*(self.b1[0]-self.b2[0]), -2*(self.b1[1]-self.b2[1])],
             [-2*(self.b1[0]-self.b3[0]), -2*(self.b1[1]-self.b3[1])]
         ])
 
         B = np.array([
-            [r1-r2-(self.b1[0]**2+self.b1[1]**2)+(self.b2[0]**2+self.b2[1]**2)],
+            [r1-r2-(self.b1[0]**2+self.b1[1]**2) +
+             (self.b2[0]**2+self.b2[1]**2)],
             [r1-r3-(self.b1[0]**2+self.b3[1]**2)+(self.b1[0]**2+self.b3[1]**2)]
         ])
 
@@ -119,10 +126,39 @@ class AcousticLocator:
             solution = np.linalg.solve(A, B)
         except Exception as e:
             print(e)
-        
-        return solution
 
-    def plot_position(self, receiver_positions):
+        return [solution, [r1, r2, r3]]
 
-        plt.scatter(receiver_positions[-1][0], receiver_positions[-1][1])
-        plt.show()
+    def plot_position(self, receiver_positions, bpos, r):
+        receiver_pos = receiver_positions[-1]
+
+        if (self.fig is None):
+            self.fig, self.ax = plt.subplots()
+            
+            self.ax.scatter([receiver_pos[0], receiver_pos[1]], [0, 0])
+
+            print(r)
+            cir1 = plt.Circle((bpos[0][0], bpos[0][1]), r[0], color='r', fill=False)
+            cir2 = plt.Circle((bpos[1][0], bpos[1][1]), r[1], color='b', fill=False)
+            cir3 = plt.Circle((bpos[2][0], bpos[2][1]), r[2], color='y', fill=False)
+            
+            self.ax.set_aspect('equal', adjustable='datalim')
+            
+            self.ax.add_patch(cir1)
+            self.ax.add_patch(cir2)
+            self.ax.add_patch(cir3)
+            
+            plt.show()
+            plt.pause(0.001)
+        else:
+            plt.clf()
+            cir1 = plt.Circle((bpos[0][0], bpos[0][1]), r[0], color='r', fill=False)
+            cir2 = plt.Circle((bpos[1][0], bpos[1][1]), r[1], color='b', fill=False)
+            cir3 = plt.Circle((bpos[2][0], bpos[2][1]), r[2], color='y', fill=False)
+            
+            self.ax.set_aspect('equal', adjustable='datalim')
+            
+            self.ax.add_patch(cir1)
+            self.ax.add_patch(cir2)
+            self.ax.add_patch(cir3)
+
