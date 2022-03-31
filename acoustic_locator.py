@@ -31,9 +31,6 @@ class AcousticLocator:
 
         self.K = 1
 
-        self.fig = None
-        self.ax = None
-
     def record_audio(self):
         audio = sounddevice.rec(int(self.record_time * self.sample_rate),
                                 samplerate=self.sample_rate, channels=self.record_channels)
@@ -105,7 +102,6 @@ class AcousticLocator:
  
         return r1, r2, r3
 
-
     def compute_position(self, powers):
         print(powers)
         r1, r2, r3 = self.compute_radiuses(self.compute_power(), powers)
@@ -129,36 +125,57 @@ class AcousticLocator:
 
         return [solution, [r1, r2, r3]]
 
-    def plot_position(self, receiver_positions, bpos, r):
+    def plot_position(self):
+        x = np.linspace(0, 10, 100)
+        y = np.sin(x)
+        
+        # to run GUI event loop
+        plt.ion()
+        
+        # here we are creating sub plots
+        figure, ax = plt.subplots(figsize=(10, 8))
+        line1, = ax.plot(x, y)
+        
+        # setting title
+        plt.title("Geeks For Geeks", fontsize=20)
+        
+        # setting x-axis label and y-axis label
+        plt.xlabel("X-axis")
+        plt.ylabel("Y-axis")
+        
+        # Loop
+        for _ in range(50):
+            # creating new Y values
+            new_y = np.sin(x-0.5*_)
+        
+            # updating data values
+            line1.set_xdata(x)
+            line1.set_ydata(new_y)
+        
+            # drawing updated values
+            figure.canvas.draw()
+        
+            # This will run the GUI event
+            # loop until all UI events
+            # currently waiting have been processed
+            figure.canvas.flush_events()
+        
+            time.sleep(0.1)
+    
+    """
+    def plot_position(self, receiver_positions, bpos, r, ax, fig):
         receiver_pos = receiver_positions[-1]
 
-        if (self.fig is None):
-            self.fig, self.ax = plt.subplots()
-            
-            self.ax.scatter([receiver_pos[0], receiver_pos[1]], [0, 0])
-
-            print(r)
-            cir1 = plt.Circle((bpos[0][0], bpos[0][1]), r[0], color='r', fill=False)
-            cir2 = plt.Circle((bpos[1][0], bpos[1][1]), r[1], color='b', fill=False)
-            cir3 = plt.Circle((bpos[2][0], bpos[2][1]), r[2], color='y', fill=False)
-            
-            self.ax.set_aspect('equal', adjustable='datalim')
-            
-            self.ax.add_patch(cir1)
-            self.ax.add_patch(cir2)
-            self.ax.add_patch(cir3)
-            
-            plt.show()
-            plt.pause(0.001)
-        else:
-            plt.clf()
-            cir1 = plt.Circle((bpos[0][0], bpos[0][1]), r[0], color='r', fill=False)
-            cir2 = plt.Circle((bpos[1][0], bpos[1][1]), r[1], color='b', fill=False)
-            cir3 = plt.Circle((bpos[2][0], bpos[2][1]), r[2], color='y', fill=False)
-            
-            self.ax.set_aspect('equal', adjustable='datalim')
-            
-            self.ax.add_patch(cir1)
-            self.ax.add_patch(cir2)
-            self.ax.add_patch(cir3)
-
+        cir1 = plt.Circle((bpos[0][0], bpos[0][1]), r[0], color='r', fill=False)
+        cir2 = plt.Circle((bpos[1][0], bpos[1][1]), r[1], color='b', fill=False)
+        cir3 = plt.Circle((bpos[2][0], bpos[2][1]), r[2], color='y', fill=False)
+        
+        ax.set_aspect('equal', adjustable='datalim')
+        
+        ax.add_patch(cir1)
+        ax.add_patch(cir2)
+        ax.add_patch(cir3)
+        
+        plt.show()
+    
+   """
