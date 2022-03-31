@@ -124,10 +124,32 @@ class AcousticLocator:
             print(e)
 
         return [solution, [r1, r2, r3]]
+        
+    def update_plot(plot_data):
+        x = plot_data["x"]
+        _ = plot_data["_"]+1
+        line1 = plot_data["line1"]
+        figure = plot_data["figure"]
 
-    def plot_position(self):
+        # creating new Y values
+        new_y = np.sin(x-0.5*_)
+    
+        # updating data values
+        line1.set_xdata(x)
+        line1.set_ydata(new_y)
+    
+        # drawing updated values
+        figure.canvas.draw()
+    
+        # This will run the GUI event
+        # loop until all UI events
+        # currently waiting have been processed
+        figure.canvas.flush_events()
+
+    def create_plot():
         x = np.linspace(0, 10, 100)
         y = np.sin(x)
+        plot_data = [];
         
         # to run GUI event loop
         plt.ion()
@@ -144,25 +166,13 @@ class AcousticLocator:
         plt.ylabel("Y-axis")
         
         # Loop
-        for _ in range(50):
-            # creating new Y values
-            new_y = np.sin(x-0.5*_)
-        
-            # updating data values
-            line1.set_xdata(x)
-            line1.set_ydata(new_y)
-        
-            # drawing updated values
-            figure.canvas.draw()
-        
-            # This will run the GUI event
-            # loop until all UI events
-            # currently waiting have been processed
-            figure.canvas.flush_events()
-        
-            time.sleep(0.1)
-    
-    """
+        plot_data["x"]=x
+        plot_data["_"]=0
+        plot_data["line1"]=line1
+        plot_data["figure"]=figure
+        return plot_data
+
+
     def plot_position(self, receiver_positions, bpos, r, ax, fig):
         receiver_pos = receiver_positions[-1]
 
@@ -178,4 +188,3 @@ class AcousticLocator:
         
         plt.show()
     
-   """

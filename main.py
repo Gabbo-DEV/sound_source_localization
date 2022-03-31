@@ -49,7 +49,7 @@ def main():
         receiver_positions.append(position)
         print(position)
         # acoustic_localizer.plot_position(receiver_positions, beacon_positions, r)
-        acoustic_localizer.update_plot(plot_data)
+        plot_data = acoustic_localizer.update_plot(plot_data)
     # end loop
 
 
