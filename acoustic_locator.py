@@ -94,7 +94,7 @@ class AcousticLocator:
         pass  # calcolare la potenza del segnale generato con lo stesso metodo con cui la si calcola sul segnale ricevuto
 
     def compute_radiuses(self, P, powers):
-        P = [17e-03, 25e-03, 34e-03]
+        P = [17e-03, 25e-03, 34e-03] 
 
         r1 = self.K * np.sqrt(P[0] / powers[0])
         r2 = self.K * np.sqrt(P[1] / powers[1])
@@ -124,56 +124,10 @@ class AcousticLocator:
             print(e)
 
         return [solution, [r1, r2, r3]]
-        
-    def update_plot(plot_data):
-        x = plot_data["x"]
-        _ = plot_data["_"]+1
-        line1 = plot_data["line1"]
-        figure = plot_data["figure"]
-
-        # creating new Y values
-        new_y = np.sin(x-0.5*_)
-    
-        # updating data values
-        line1.set_xdata(x)
-        line1.set_ydata(new_y)
-    
-        # drawing updated values
-        figure.canvas.draw()
-    
-        # This will run the GUI event
-        # loop until all UI events
-        # currently waiting have been processed
-        figure.canvas.flush_events()
-
-    def create_plot():
-        x = np.linspace(0, 10, 100)
-        y = np.sin(x)
-        plot_data = [];
-        
-        # to run GUI event loop
-        plt.ion()
-        
-        # here we are creating sub plots
-        figure, ax = plt.subplots(figsize=(10, 8))
-        line1, = ax.plot(x, y)
-        
-        # setting title
-        plt.title("Geeks For Geeks", fontsize=20)
-        
-        # setting x-axis label and y-axis label
-        plt.xlabel("X-axis")
-        plt.ylabel("Y-axis")
-        
-        # Loop
-        plot_data["x"]=x
-        plot_data["_"]=0
-        plot_data["line1"]=line1
-        plot_data["figure"]=figure
-        return plot_data
 
 
-    def plot_position(self, receiver_positions, bpos, r, ax, fig):
+    def plot_position(self, receiver_positions, bpos, r, fig, ax):
+        
         receiver_pos = receiver_positions[-1]
 
         cir1 = plt.Circle((bpos[0][0], bpos[0][1]), r[0], color='r', fill=False)
@@ -181,10 +135,15 @@ class AcousticLocator:
         cir3 = plt.Circle((bpos[2][0], bpos[2][1]), r[2], color='y', fill=False)
         
         ax.set_aspect('equal', adjustable='datalim')
+        ax.clear()
         
         ax.add_patch(cir1)
         ax.add_patch(cir2)
         ax.add_patch(cir3)
+
         
-        plt.show()
+        plt.plot(receiver_pos[0], receiver_pos[1], marker="o", markersize=10, markeredgecolor="black", markerfacecolor="black")
+        
+        plt.pause(0.05)
+
     
