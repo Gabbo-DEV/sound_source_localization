@@ -103,19 +103,20 @@ class AcousticLocator:
         return r1, r2, r3
 
     def compute_position(self, powers):
-        print(powers)
         r1, r2, r3 = self.compute_radiuses(self.compute_power(), powers)
 
-        A = np.array([
-            [-2*(self.b1[0]-self.b2[0]), -2*(self.b1[1]-self.b2[1])],
-            [-2*(self.b1[0]-self.b3[0]), -2*(self.b1[1]-self.b3[1])]
-        ])
+        x1 = self.b1[0]
+        y1 = self.b1[1]
+        x2 = self.b2[0]
+        y2 = self.b2[1]
+        x3 = self.b3[0]
+        y3 = self.b3[1]
 
-        B = np.array([
-            [r1-r2-(self.b1[0]**2+self.b1[1]**2) +
-             (self.b2[0]**2+self.b2[1]**2)],
-            [r1-r3-(self.b1[0]**2+self.b3[1]**2)+(self.b1[0]**2+self.b3[1]**2)]
-        ])
+        b1 = r1**2-r2**2-(x1**2+y1**2)+(x2**2+y2**2)
+        b2 = r1**2-r3**2-(x1**2+y1**2)+(x3**2+y3**2)
+        
+        A = np.array([[-2*(x1-x2), -2*(y1-y2)], [-2*(x1-x3), -2*(y1-y3)]])
+        B = np.array([[b1],[b2]])
 
         solution = 0
         try:
