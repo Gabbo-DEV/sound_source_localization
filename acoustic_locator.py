@@ -127,7 +127,7 @@ class AcousticLocator:
         return [solution, [r1, r2, r3]]
 
 
-    def plot_position(self, receiver_positions, bpos, r, fig, ax):
+    def plot_position(self, receiver_positions, bpos, r, ax):
         
         receiver_pos = receiver_positions[-1]
 
@@ -143,7 +143,7 @@ class AcousticLocator:
         ax.add_patch(cir3)
 
         
-        plt.plot(receiver_pos[0], receiver_pos[1], marker="o", markersize=10, markeredgecolor="black", markerfacecolor="black")
+        plt.scatter(receiver_pos[0], receiver_pos[1], marker="o", markersize=10, markeredgecolor="black", markerfacecolor="black")
         
         plt.pause(0.05)
 
