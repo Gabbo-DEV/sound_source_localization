@@ -1,4 +1,3 @@
-import time
 import sounddevice
 import numpy as np
 import matplotlib.pyplot as plt
@@ -127,13 +126,10 @@ class AcousticLocator:
         return [solution, [r1, r2, r3]]
 
 
-    def plot_position(self, receiver_positions, bpos, r, ax):
-        
-        receiver_pos = receiver_positions[-1]
-
-        cir1 = plt.Circle((bpos[0][0], bpos[0][1]), r[0], color='r', fill=False)
-        cir2 = plt.Circle((bpos[1][0], bpos[1][1]), r[1], color='b', fill=False)
-        cir3 = plt.Circle((bpos[2][0], bpos[2][1]), r[2], color='y', fill=False)
+    def plot_position(self, receiver_position, r, ax):
+        cir1 = plt.Circle((self.b1[0], self.b1[1]), r[0], color='r', fill=False)
+        cir2 = plt.Circle((self.b2[0], self.b2[1]), r[1], color='b', fill=False)
+        cir3 = plt.Circle((self.b3[0], self.b3[1]), r[2], color='y', fill=False)
         
         ax.set_aspect('equal', adjustable='datalim')
         ax.clear()
@@ -141,10 +137,9 @@ class AcousticLocator:
         ax.add_patch(cir1)
         ax.add_patch(cir2)
         ax.add_patch(cir3)
-
+       
         
-        plt.scatter(receiver_pos[0], receiver_pos[1], marker="o", markersize=10, markeredgecolor="black", markerfacecolor="black")
         
-        plt.pause(0.05)
+        
 
     

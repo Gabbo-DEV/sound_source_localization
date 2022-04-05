@@ -50,4 +50,8 @@ def main():
         position, r = acoustic_localizer.compute_position(powers)
         receiver_positions.append(position)
         print(position)
-        acoustic_localizer.plot_position(receiver_positions, beacon_positions, r, fig, ax)
+        acoustic_localizer.plot_position(receiver_positions, beacon_positions, r, ax)
+
+
+if __name__ == '__main__':
+    main()
