@@ -16,12 +16,14 @@ from main import getBeaconsFrequencies, getBeaconsPositions
 matplotlib.use('Qt5Agg')
 
 
+
 class MplCanvas(FigureCanvas):
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = fig.add_subplot(111)
+        self.axes = fig.add_subplot()
         super(MplCanvas, self).__init__(fig)
         fig.tight_layout()
+        self.axes.axis('scaled')
 
 
 class Application(QtWidgets.QMainWindow):
@@ -32,18 +34,13 @@ class Application(QtWidgets.QMainWindow):
         self.threadpool = QtCore.QThreadPool()
 
         self.canvas = MplCanvas(self, width=5, height=4, dpi=100)
-        self.ui.gridLayout_3.addWidget(self.canvas, 2, 1, 1, 1)
-        self.reference_plot = None
-        self.q = queue.Queue(maxsize=20)
+        self.ui.gridLayout_4.addWidget(self.canvas, 2, 1, 1, 1)
 
-        self.timer = QtCore.QTimer()
         self.sampleRateField.setText("44100")
         self.kValueSlider.valueChanged.connect(self.update_k)
         self.sampleRateField.textChanged["QString"].connect(self.update_sample_rate)
-        self.updateIntervalField.textChanged["QString"].connect(self.update_update_interval)
-        self.pushButton.clicked.connect(self.start_worker)
-
-
+        self.startButton.clicked.connect(self.start_worker)
+        
 
     def start_worker(self):
         worker = Worker(self.start_stream, )
@@ -52,9 +49,8 @@ class Application(QtWidgets.QMainWindow):
     def start_stream(self):
         self.kValueSlider.setEnabled(False)
         self.sampleRateField.setEnabled(False)
-        self.updateIntervalField.setEnabled(False)
         self.run_loop()
-    
+
     def run_loop(self):
          while True:
             input_signal = self.acoustic_locator.record_audio()
@@ -67,18 +63,31 @@ class Application(QtWidgets.QMainWindow):
             
     
     def plot_position(self, receiver_position, r):
-        pass
+        
+        cir1 = plt.Circle((self.acoustic_locator.b1[0], self.acoustic_locator.b1[1]), r[0], color='r', fill=False)
+        cir2 = plt.Circle((self.acoustic_locator.b2[0], self.acoustic_locator.b2[1]), r[1], color='b', fill=False)
+        cir3 = plt.Circle((self.acoustic_locator.b3[0], self.acoustic_locator.b3[1]), r[2], color='y', fill=False)
+        
+        self.canvas.axes.set_aspect('equal', adjustable='datalim')
+        self.canvas.axes.clear()
+        self.canvas.axes.add_patch(cir1)
+        self.canvas.axes.add_patch(cir2)
+        self.canvas.axes.add_patch(cir3)
+        self.canvas.axes.scatter(receiver_position[0], receiver_position[1])
+        self.canvas.axes.axis('scaled')
+        
+        self.canvas.draw()
+        
+      
 
     def update_k(self, value):
         self.acoustic_locator.K = int(value)
-        self.kLabel.setText(str(value))
+        self.klabel.setText(f'K ({str(value)})')
 
     def update_sample_rate(self, value):
         self.acoustic_locator.sampleRate = int(value)
-        sd.default.samplerate = self.samplerate
-    
-    def update_update_interval(self, value):
-        pass
+        sd.default.samplerate = self.sampleRateField
+
 
 class Worker(QtCore.QRunnable):
     def __init__(self, function, *args, **kwargs):
