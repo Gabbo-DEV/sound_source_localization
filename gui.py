@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSlot
 from PyQt5 import uic
 import sounddevice as sd
@@ -10,12 +10,11 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import sys
 import matplotlib.pyplot as plt
 import matplotlib
+from about import Ui_AboutWindow
 
 from acoustic_locator import AcousticLocator
 from main import getBeaconsFrequencies, getBeaconsPositions
 matplotlib.use('Qt5Agg')
-
-
 
 class MplCanvas(FigureCanvas):
     def __init__(self, parent=None, width=5, height=4, dpi=100):
@@ -32,34 +31,56 @@ class Application(QtWidgets.QMainWindow):
         QtWidgets.QMainWindow.__init__(self)
         self.ui = uic.loadUi('main.ui', self)
         self.threadpool = QtCore.QThreadPool()
+        self.streamInitialized = False
 
         self.canvas = MplCanvas(self, width=5, height=4, dpi=100)
-        self.ui.gridLayout_4.addWidget(self.canvas, 2, 1, 1, 1)
+        
 
+        
         self.sampleRateField.setText("44100")
         self.kValueSlider.valueChanged.connect(self.update_k)
         self.sampleRateField.textChanged["QString"].connect(self.update_sample_rate)
         self.startButton.clicked.connect(self.start_worker)
-        
+        self.aboutButton.clicked.connect(self.showAboutPage)
+
+    def showAboutPage(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui2 = Ui_AboutWindow()
+        self.ui2.setupUi(self.window)
+        self.window.show()
 
     def start_worker(self):
-        worker = Worker(self.start_stream, )
-        self.threadpool.start(worker)	
+        if (self.startButton.text() == "Start"):
+            self.kValueSlider.setEnabled(False)
+            self.sampleRateField.setEnabled(False)
+            self.ui.gridLayout_4.addWidget(self.canvas, 2, 1, 1, 1)
+            self.startButton.setText("Stop")
+            self.streamInitialized = True
+            self.worker = Worker(self.start_stream, )
+            self.threadpool.start(self.worker)	
+        else: 
+            self.startButton.setText("Start")
+            self.kValueSlider.setEnabled(True)
+            self.sampleRateField.setEnabled(True)
+            self.streamInitialized = False
+            self.canvas.setParent(None)
+            
 
-    def start_stream(self):
-        self.kValueSlider.setEnabled(False)
-        self.sampleRateField.setEnabled(False)
+    def start_stream(self):  
         self.run_loop()
 
     def run_loop(self):
          while True:
-            input_signal = self.acoustic_locator.record_audio()
-            outs = self.acoustic_locator.compute_convolution(input_signal)
-            powers = self.acoustic_locator.compute_powers(outs)
-            position, r = self.acoustic_locator.compute_position(powers)
-            print(position)
-            # self.acoustic_locator.plot_position(position, r, self.canvas.axes)
-            self.plot_position(position, r)
+            if (self.streamInitialized):
+                input_signal = self.acoustic_locator.record_audio()
+                outs = self.acoustic_locator.compute_convolution(input_signal)
+                powers = self.acoustic_locator.compute_powers(outs)
+                position, r = self.acoustic_locator.compute_position(powers)
+                print(position)
+                self.plot_position(position, r)
+            else:
+                break
+            
             
     
     def plot_position(self, receiver_position, r):
@@ -103,8 +124,11 @@ class Worker(QtCore.QRunnable):
 
 
 if __name__ == '__main__':
-    beacon_positions = getBeaconsPositions()
-    beacon_frequencies = getBeaconsFrequencies()
+    try:
+        beacon_positions = getBeaconsPositions()
+        beacon_frequencies = getBeaconsFrequencies()
+    except FileNotFoundError:
+        exit('\033[91m' + 'Error! Configuration file not found')
     locator = AcousticLocator(beacon_positions, beacon_frequencies)
     app = QtWidgets.QApplication(sys.argv)
     mainWindow = Application(locator)

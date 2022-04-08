@@ -74,6 +74,7 @@ class AcousticLocator:
         return return_array
 
     def compute_powers(self, outs):
+        
         '''
         ComputePowers(outs) 
         powers = []
@@ -87,12 +88,14 @@ class AcousticLocator:
             power = sum(np.abs(signal)**2)
             powers.append(power)
 
+        print(powers)
         return powers
 
     def compute_power(self):
         pass  # calcolare la potenza del segnale generato con lo stesso metodo con cui la si calcola sul segnale ricevuto
 
     def compute_radiuses(self, P, powers):
+        
         P = [17e-03, 25e-03, 34e-03] 
 
         r1 = self.K * np.sqrt(P[0] / powers[0])
