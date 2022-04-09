@@ -96,12 +96,15 @@ class AcousticLocator:
 
     def compute_radiuses(self, P, powers):
         
-        P = [17e-03, 25e-03, 34e-03] 
+        P = [196, 9.8, 140] 
 
         r1 = self.K * np.sqrt(P[0] / powers[0])
         r2 = self.K * np.sqrt(P[1] / powers[1])
         r3 = self.K * np.sqrt(P[2] / powers[2])
- 
+
+        print(f'R1: {r1}')
+        print(f'R2: {r2}')
+        print(f'R3: {r3}')
         return r1, r2, r3
 
     def compute_position(self, powers):

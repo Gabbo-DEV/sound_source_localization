@@ -9,14 +9,14 @@
     "beacon2": {
         "coordinates": [
             0.0,
-            10.0
+            2.0
         ],
         "frequency": 17000
     },
     "beacon3": {
         "coordinates": [
-            10.0,
-            0.0
+            2.0,
+            2.0
         ],
         "frequency": 18000
     }
