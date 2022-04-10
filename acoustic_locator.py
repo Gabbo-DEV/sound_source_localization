@@ -96,7 +96,7 @@ class AcousticLocator:
 
     def compute_radiuses(self, P, powers):
         
-        P = [196, 9.8, 140] 
+        P = [0.0005122017778702302, 0.0005122017778702302, 0.0005122017778702302] 
 
         r1 = self.K * np.sqrt(P[0] / powers[0])
         r2 = self.K * np.sqrt(P[1] / powers[1])
@@ -133,7 +133,8 @@ class AcousticLocator:
 
 
     def plot_position(self, receiver_position, r, ax):
-        cir1 = plt.Circle((self.b1[0], self.b1[1]), r[0], color='r', fill=False)
+        
+        cir1 = plt.Circle((self.b1[0], self.b1[1]), r[0], color='r', fill=False, label='piero')
         cir2 = plt.Circle((self.b2[0], self.b2[1]), r[1], color='b', fill=False)
         cir3 = plt.Circle((self.b3[0], self.b3[1]), r[2], color='y', fill=False)
         
@@ -143,8 +144,9 @@ class AcousticLocator:
         ax.add_patch(cir1)
         ax.add_patch(cir2)
         ax.add_patch(cir3)
-       
-        
+        ax.scatter(receiver_position[0], receiver_position[1], color='black')
+
+        plt.pause(0.001)
         
         
 

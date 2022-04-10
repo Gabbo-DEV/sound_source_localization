@@ -42,6 +42,8 @@ def main():
     acoustic_localizer = AcousticLocator(beacon_positions, beacon_frequencies)
 
     fig, ax = plt.subplots()
+    plt.xlim(2, 8)
+    plt.ylim(-0.50,1.5)
 
     while True:
         input_signal = acoustic_localizer.record_audio()
@@ -50,7 +52,7 @@ def main():
         position, r = acoustic_localizer.compute_position(powers)
         receiver_positions.append(position)
         print(position)
-        acoustic_localizer.plot_position(receiver_positions, beacon_positions, r, ax)
+        acoustic_localizer.plot_position(position, r, ax)
 
 
 if __name__ == '__main__':

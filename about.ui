@@ -7,8 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>450</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <weight>50</weight>
+    <bold>false</bold>
+   </font>
   </property>
   <property name="windowTitle">
    <string>About</string>
@@ -22,7 +28,7 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>91</width>
+      <width>141</width>
       <height>31</height>
      </rect>
     </property>
@@ -32,7 +38,7 @@
      </font>
     </property>
     <property name="text">
-     <string>About</string>
+     <string>Contributors</string>
     </property>
    </widget>
    <widget class="Line" name="line">
@@ -51,42 +57,29 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>60</y>
-      <width>111</width>
-      <height>121</height>
+      <x>30</x>
+      <y>350</y>
+      <width>191</width>
+      <height>17</height>
      </rect>
     </property>
-    <property name="text">
-     <string/>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
-    <property name="pixmap">
-     <pixmap>assets/panetti.jpeg</pixmap>
+    <property name="text">
+     <string>Resource: </string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>500</x>
+      <x>30</x>
       <y>60</y>
-      <width>171</width>
-      <height>141</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>assets/poliba.jpeg</pixmap>
-    </property>
-   </widget>
-   <widget class="QWidget" name="">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>250</y>
-      <width>139</width>
-      <height>146</height>
+      <width>181</width>
+      <height>231</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -97,10 +90,10 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_9">
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Antonello Longo</string>
+        <string>Gresi Simone</string>
        </property>
       </widget>
      </item>
@@ -114,21 +107,28 @@
      <item row="3" column="0">
       <widget class="QLabel" name="label_7">
        <property name="text">
-        <string>Cataldo Guaragnella</string>
+        <string>Guaragnella Cataldo</string>
        </property>
       </widget>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="label_8">
        <property name="text">
-        <string>Matteo Palieri</string>
+        <string>Palieri Matteo</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_5">
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_9">
        <property name="text">
-        <string>Gresi Simone</string>
+        <string>Longo Antonello</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_11">
+       <property name="text">
+        <string>De Scisciolo Graziano</string>
        </property>
       </widget>
      </item>
@@ -141,7 +141,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>24</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
